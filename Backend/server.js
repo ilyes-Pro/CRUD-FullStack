@@ -4,10 +4,13 @@ import multer from 'multer';
 import pg from 'pg';
 import path from 'path';
 import cors from 'cors';
+import fs from 'fs';
 
 const { Pool } = pg;
 
-// dotenv.config({ path: path.resolve("../.env") });
+const __dirname = path.resolve();
+
+// dotenv.config({ path: path.resolve('../.env') });
 
 dotenv.config();
 
@@ -33,8 +36,13 @@ const db = new Pool({
 app.get('/AllProdacts', async (req, res) => {
   try {
     let result = await db.query('SELECT * FROM prodact');
+    console.log('this is url : ', process.env.BASE_URL);
+    const products = result.rows.map((row) => ({
+      ...row,
+      img_p: `${process.env.BASE_URL}/${row.img_p}`,
+    }));
 
-    res.status(200).json(result.rows);
+    res.status(200).json(products);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -42,7 +50,11 @@ app.get('/AllProdacts', async (req, res) => {
 });
 
 const storage = multer.diskStorage({
-  destination: 'prodactADD/',
+  destination: (req, file, cb) => {
+    // هنا دايمًا حيحفظ في Backend/uploads/prodactADD
+    cb(null, path.join(__dirname, 'prodactADD'));
+  },
+
   filename: (req, file, cb) => cb(null, Date.now() + '-' + file.originalname),
 });
 
@@ -62,9 +74,7 @@ app.post('/addProdact', upload.single('image'), async (req, res) => {
   try {
     let nameP = req.body?.nameP;
     let priceP = parseInt(req.body.priceP);
-    let imgP = req.file
-      ? `${req.protocol}://${req.get('host')}/prodactADD/${req.file.filename}`
-      : null;
+    let imgP = req.file ? req.file.filename : null;
     let Error = [];
     if (!nameP) {
       Error.push('name');
@@ -98,9 +108,7 @@ app.patch('/Update/:id', upload.single('image'), async (req, res) => {
   try {
     let id = parseInt(req.params.id);
     let { nameP, priceP } = req.body;
-    let imgP = req.file
-      ? `${req.protocol}://${req.get('host')}/prodactADD/${req.file.filename}`
-      : null;
+    let imgP = req.file ? req.file.filename : null;
 
     if (!nameP && !priceP && !imgP) {
       return res
@@ -115,13 +123,19 @@ app.patch('/Update/:id', upload.single('image'), async (req, res) => {
 
     nameP = nameP || check.rows[0].name_p;
     priceP = priceP || check.rows[0].price_p;
-    imgP = imgP || check.rows[0].img_p;
-
+    // imgP = imgP || check.rows[0].img_p;
+    if (imgP) {
+      deleteImage(check.rows[0].img_p);
+    } else {
+      imgP = check.rows[0].img_p;
+    }
     let result = await db.query(
       'UPDATE prodact SET name_p=$2,price_p=$3 ,img_p=$4 WHERE id=$1 RETURNING *',
       [id, nameP, priceP, imgP]
     );
 
+    const a = `${process.env.BASE_URL}/${result.rows[0].img_p}`;
+    result.rows[0].img_p = a;
     res.status(200).json(result.rows[0]);
   } catch (err) {
     console.log(err);
@@ -163,6 +177,7 @@ app.delete('/delete/:id', async (req, res) => {
   try {
     let id = parseInt(req.params.id);
 
+    // نحذف من قاعدة البيانات
     let result = await db.query('DELETE FROM prodact WHERE id=$1 RETURNING *', [
       id,
     ]);
@@ -171,13 +186,37 @@ app.delete('/delete/:id', async (req, res) => {
       return res.status(404).json({ error: 'Product not found' });
     }
 
+    // اسم الصورة المخزّن في db (مثلاً: 1757...jpg)
+    const filename = result.rows[0].img_p;
+    console.log('This is img ', filename);
+
+    // نحذف الصورة من السيرفر
+    deleteImage(filename);
+
     res.status(200).json({ message: 'Deleted successfully' });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-const __dirname = path.resolve();
+
+function deleteImage(img) {
+  // مسار مطلق → يربط مجلد المشروع مع uploads/prodactADD
+  const fullPath = path.join(__dirname, 'prodactADD', img);
+
+  fs.unlink(
+    fullPath,
+    // 'prodactADD/' + img
+    (err) => {
+      if (err) {
+        console.error('Problem in Delete file', err);
+      } else {
+        console.log('File deleted:', fullPath);
+      }
+    }
+  );
+}
+
 app.use('/prodactADD', express.static('prodactADD'));
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/dist')));
