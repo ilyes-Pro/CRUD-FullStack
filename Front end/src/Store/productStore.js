@@ -3,12 +3,16 @@ import axios from 'axios';
 
 const useProductStore = create((set) => ({
   products: [],
+  loding: false,
   ShowProducts: async () => {
     try {
+      set({ loading: true });
       const response = await axios.get('http://localhost:5000/AllProdacts');
       set({ products: response.data });
     } catch (error) {
       console.error(error);
+    } finally {
+      set({ loading: false }); // ⬅️ يتنفذ سواء نجح أو فشل
     }
   },
 
