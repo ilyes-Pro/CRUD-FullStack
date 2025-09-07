@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import useProductStore from '../Store/productStore';
 import { ToastContainer, toast, Zoom, Slide } from 'react-toastify';
 
@@ -16,13 +16,12 @@ export default function CreatePage() {
   const handleAddProduct = () => {
     setShowImg(null);
     setEr(false);
+
     AddProduct(
       newProduct,
       () => {
-        setEr(false);
-        console.log(Er);
-
         toast.success('is done');
+        setEr(false);
       },
       (err) => {
         toast.error(err);
@@ -36,6 +35,9 @@ export default function CreatePage() {
     });
   };
 
+  useEffect(() => {
+    console.log('Er updated:', Er);
+  }, [Er]);
   return (
     <>
       <div className="flex justify-center items-center mt-10 flex-col gap-8">
@@ -54,7 +56,7 @@ export default function CreatePage() {
               type="text"
               placeholder="Product Name"
               className="border-solid border-2 border-gray-300 w-11/12 h-10 rounded-md text-gray-300 pl-3"
-              style={{ borderColor: Er ? 'red' : 'none' }}
+              style={{ borderColor: Er ? 'red' : '#D1D5DB' }}
             />
 
             <input
@@ -68,7 +70,7 @@ export default function CreatePage() {
               type="number"
               placeholder="Price"
               className="border-solid border-2 border-gray-300 w-11/12 h-10 rounded-md text-gray-300 pl-3"
-              style={{ borderColor: Er ? 'red' : 'none' }}
+              style={{ borderColor: Er ? 'red' : '#D1D5DB' }}
             />
 
             <input
@@ -92,7 +94,7 @@ export default function CreatePage() {
               <div>
                 <button
                   onClick={() => fileInputRef.current.click()}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer"
                 >
                   Selct img
                 </button>
@@ -117,11 +119,12 @@ export default function CreatePage() {
 
       <ToastContainer
         className="Toastify__toast-container  "
-        toastClassName="!w-[300px] max-xs:!w-[50%] max-sm:!w-[80%] max-sm:text-xs max-xs:bottom-7 max-xs:right-3 max-sm:!rounded-md"
+        toastClassName="!bg-bgCARD !w-[300px] max-xs:!w-[50%] max-sm:!w-[80%] max-sm:text-xs max-xs:bottom-7 max-xs:right-3 max-sm:!rounded-md"
         position="bottom-right"
         autoClose={2000}
         transition={Slide}
-        theme={document.body.classList.contains('dark') ? 'dark' : 'light'}
+
+        // theme={document.body.classList.contains('dark') ? 'dark' : 'light'}
       />
     </>
   );

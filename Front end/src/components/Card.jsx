@@ -86,6 +86,9 @@ export default function Card() {
               Current Products{' '}
             </h1>
             <Rocket className="text-MainText" />
+            <span className="text-MainText font-bold text-[22px]">
+              ({products.length})
+            </span>
           </div>
 
           <div className="mt-10 flex items-center justify-center gap-6 flex-wrap">
@@ -195,7 +198,7 @@ export default function Card() {
                 <div>
                   <button
                     onClick={() => fileInputRef.current.click()}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer"
                   >
                     Selct img
                   </button>
