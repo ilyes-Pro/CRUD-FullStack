@@ -72,7 +72,7 @@ const upload = multer({ storage, fileFilter });
 
 app.post('/addProdact', upload.single('image'), async (req, res) => {
   try {
-    let nameP = req.body?.nameP;
+    let nameP = req.body?.nameP.trim();
     let priceP = parseInt(req.body.priceP);
     let imgP = req.file ? req.file.filename : null;
     let Error = [];
@@ -87,8 +87,9 @@ app.post('/addProdact', upload.single('image'), async (req, res) => {
     }
 
     if (Error.length > 0) {
+      deleteImage(imgP);
       return res
-        .status(404)
+        .status(400)
         .json({ error: `enter you ${Error.join(' and ')}` });
     }
 
@@ -107,7 +108,8 @@ app.post('/addProdact', upload.single('image'), async (req, res) => {
 app.patch('/Update/:id', upload.single('image'), async (req, res) => {
   try {
     let id = parseInt(req.params.id);
-    let { nameP, priceP } = req.body;
+    let nameP = req.body?.nameP.trim();
+    let priceP = parseInt(req.body.priceP);
     let imgP = req.file ? req.file.filename : null;
 
     if (!nameP && !priceP && !imgP) {

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const useProductStore = create((set) => ({
   products: [],
-  loding: false,
+  loading: false,
   ShowProducts: async () => {
     try {
       set({ loading: true });
@@ -16,7 +16,7 @@ const useProductStore = create((set) => ({
     }
   },
 
-  AddProduct: async (newProduct) => {
+  AddProduct: async (newProduct, onSuccess, onError) => {
     try {
       const formData = new FormData();
       formData.append('nameP', newProduct.nameP);
@@ -34,12 +34,15 @@ const useProductStore = create((set) => ({
       set((state) => ({
         products: [...state.products, response.data],
       }));
+      if (onSuccess) onSuccess();
     } catch (error) {
-      console.error('Error adding product:', error);
+      console.error(error.response.data.error);
+
+      if (onError) onError(error.response.data.error);
     }
   },
 
-  EditProduct: async (newProduct) => {
+  EditProduct: async (newProduct, onSuccess, onError) => {
     console.log('in store', newProduct);
     try {
       const formData = new FormData();
@@ -63,8 +66,10 @@ const useProductStore = create((set) => ({
           product.id === pr.id ? pr : product
         ),
       }));
+      if (onSuccess) onSuccess();
     } catch (error) {
       console.error('Error adding  new product:', error);
+      if (onError) onError(error.response.data.error);
     }
   },
 
