@@ -1,5 +1,5 @@
 import { Rocket, Upload } from 'lucide-react';
-import Test from '../assets/keypord.jpg';
+
 import { ShoppingCart } from 'lucide-react';
 import { CopyPlus } from 'lucide-react';
 import { Sun } from 'lucide-react';
@@ -54,7 +54,7 @@ export default function Card() {
     EditProduct(
       updateP,
       () => {
-        toast.success('is done');
+        toast.success('Operation is Successful');
         setOpen(false);
         setEr(false);
       },
@@ -91,12 +91,12 @@ export default function Card() {
             </span>
           </div>
 
-          <div className="mt-10 flex items-center justify-center gap-6 flex-wrap">
+          <div className="mt-10 flex items-center justify-center gap-8 flex-wrap">
             {products.length > 0 ? (
               products.map((productt) => (
                 <div
                   key={productt.id}
-                  className="w-[300px] bg-bgCARD rounded-md"
+                  className="w-[300px] bg-bgCARD rounded-md transition hover:translate-y-[-10px]"
                 >
                   <img
                     src={productt.img_p}
@@ -159,7 +159,7 @@ export default function Card() {
                 }
                 type="text"
                 placeholder="Product Name"
-                className=" border-solid border-2 border-gray-300 w-12/12 h-10 rounded-md text-gray-300 pl-3"
+                className=" border-solid border-2 border-gray-300 w-12/12 h-10 rounded-md text-Text pl-3"
                 style={{ borderColor: Er ? 'red' : 'none' }}
               />
 
@@ -173,7 +173,7 @@ export default function Card() {
                 }
                 type="number"
                 placeholder="Price"
-                className=" border-solid border-2 border-gray-300 w-12/12 h-10 rounded-md text-gray-300 pl-3"
+                className=" border-solid border-2 border-gray-300 w-12/12 h-10 rounded-md text-Text pl-3"
                 style={{ borderColor: Er ? 'red' : 'none' }}
               />
 
@@ -198,7 +198,7 @@ export default function Card() {
                 <div>
                   <button
                     onClick={() => fileInputRef.current.click()}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer"
+                    className="bg-blue-500  px-4 py-2 rounded-md cursor-pointer text-Text"
                   >
                     Selct img
                   </button>
@@ -214,11 +214,17 @@ export default function Card() {
             </div>
             <div className="flex justify-end gap-2 mt-2">
               <DialogClose>
-                <Button onClick={Updat02}>update</Button>
+                <Button onClick={Updat02} className="text-Text">
+                  update
+                </Button>
               </DialogClose>
 
               <DialogClose>
-                <Button variant="secondare" onClick={() => setShowImg(null)}>
+                <Button
+                  variant="secondare"
+                  onClick={() => setShowImg(null)}
+                  className="text-Text"
+                >
                   Cancel
                 </Button>
               </DialogClose>
@@ -233,9 +239,9 @@ export default function Card() {
 
       <ToastContainer
         className="Toastify__toast-container  "
-        toastClassName="!w-[300px] max-xs:!w-[50%] max-sm:!w-[80%] max-sm:text-xs max-xs:bottom-7 max-xs:right-3 max-sm:!rounded-md"
+        toastClassName="!bg-bgCARD !w-[300px] max-xs:!w-[50%] max-sm:!w-[80%] max-sm:text-xs max-xs:bottom-7 max-xs:right-3 max-sm:!rounded-md !text-Text"
         position="bottom-right"
-        autoClose={2000}
+        autoClose={3000}
         transition={Slide}
         theme={document.body.classList.contains('dark') ? 'dark' : 'light'}
       />

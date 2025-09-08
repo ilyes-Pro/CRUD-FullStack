@@ -20,7 +20,7 @@ export default function CreatePage() {
     AddProduct(
       newProduct,
       () => {
-        toast.success('is done');
+        toast.success('Operation is Successful');
         setEr(false);
       },
       (err) => {
@@ -43,7 +43,7 @@ export default function CreatePage() {
       <div className="flex justify-center items-center mt-10 flex-col gap-8">
         <h1 className="text-Text font-bold text-[30px] ">Create New Product</h1>
 
-        <div className="w-[450px] bg-bgCARD rounded-md pb-5">
+        <div className="max-xs:w-10/12 lg:w-4/12 sm:w-9/12 xs:w-10/12 md:w-7/12 bg-bgCARD rounded-md pb-5">
           <div className="flex justify-center items-center flex-col gap-3 mt-7">
             <input
               value={newProduct.nameP}
@@ -55,7 +55,7 @@ export default function CreatePage() {
               }
               type="text"
               placeholder="Product Name"
-              className="border-solid border-2 border-gray-300 w-11/12 h-10 rounded-md text-gray-300 pl-3"
+              className="border-solid border-2 border-gray-300 w-11/12 h-10 rounded-md text-Text pl-3"
               style={{ borderColor: Er ? 'red' : '#D1D5DB' }}
             />
 
@@ -69,7 +69,7 @@ export default function CreatePage() {
               }
               type="number"
               placeholder="Price"
-              className="border-solid border-2 border-gray-300 w-11/12 h-10 rounded-md text-gray-300 pl-3"
+              className="border-solid border-2 border-gray-300 w-11/12 h-10 rounded-md text-Text pl-3"
               style={{ borderColor: Er ? 'red' : '#D1D5DB' }}
             />
 
@@ -94,7 +94,7 @@ export default function CreatePage() {
               <div>
                 <button
                   onClick={() => fileInputRef.current.click()}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md cursor-pointer"
+                  className="bg-blue-500 text-Text px-4 py-2 rounded-md cursor-pointer "
                 >
                   Selct img
                 </button>
@@ -108,7 +108,7 @@ export default function CreatePage() {
               )}
             </div>
             <button
-              className="bg-MainText w-11/12 h-10 rounded-md hover:transition hover:bg-blue-400 cursor-pointer"
+              className="bg-MainText w-11/12 h-10 rounded-md hover:transition hover:bg-blue-400 cursor-pointer "
               onClick={handleAddProduct}
             >
               Add Product
@@ -119,9 +119,9 @@ export default function CreatePage() {
 
       <ToastContainer
         className="Toastify__toast-container  "
-        toastClassName="!bg-bgCARD !w-[300px] max-xs:!w-[50%] max-sm:!w-[80%] max-sm:text-xs max-xs:bottom-7 max-xs:right-3 max-sm:!rounded-md"
+        toastClassName="!bg-bgCARD !w-[300px] max-xs:!w-[50%] max-sm:!w-[80%] max-sm:text-xs max-xs:bottom-7 max-xs:right-3 max-sm:!rounded-md !text-Text"
         position="bottom-right"
-        autoClose={2000}
+        autoClose={3000}
         transition={Slide}
 
         // theme={document.body.classList.contains('dark') ? 'dark' : 'light'}

@@ -13,12 +13,12 @@ const __dirname = path.resolve();
 // dotenv.config({ path: path.resolve('../.env') });
 
 dotenv.config();
-
+let NODE_ENV = process.env.NODE_ENV.trim();
 const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
-if (process.env.MOD_ENV == 'development') {
+if (NODE_ENV == 'development') {
   app.use(
     cors({
       origin: process.env.FRONTEND_URL,
@@ -77,20 +77,23 @@ app.post('/addProdact', upload.single('image'), async (req, res) => {
     let imgP = req.file ? req.file.filename : null;
     let Error = [];
     if (!nameP) {
-      Error.push('name');
+      Error.push('Name');
     }
     if (!priceP) {
-      Error.push('price');
+      Error.push('Price');
     }
     if (!imgP) {
-      Error.push('img');
+      Error.push('Img');
     }
 
     if (Error.length > 0) {
-      deleteImage(imgP);
+      if (imgP) {
+        deleteImage(imgP);
+      }
+
       return res
-        .status(400)
-        .json({ error: `enter you ${Error.join(' and ')}` });
+        .status(404)
+        .json({ error: `Enter you ${Error.join(' and ')}` });
     }
 
     let result = await db.query(
@@ -113,9 +116,7 @@ app.patch('/Update/:id', upload.single('image'), async (req, res) => {
     let imgP = req.file ? req.file.filename : null;
 
     if (!nameP && !priceP && !imgP) {
-      return res
-        .status(400)
-        .json({ error: 'You must provide at least one field to update' });
+      return res.status(400).json({ error: 'Enter at least one item' });
     }
 
     let check = await db.query('SELECT * FROM prodact WHERE id=$1', [id]);
@@ -220,11 +221,19 @@ function deleteImage(img) {
 }
 
 app.use('/prodactADD', express.static('prodactADD'));
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '/frontend/dist')));
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'));
+// console.log(path.join(__dirname, '.', '..', 'Frontend', 'dist'));
+
+console.log(`[${process.env.NODE_ENV}]`);
+
+if (NODE_ENV === 'production') {
+  const frontDist = path.join(__dirname, '..', 'frontend', 'dist');
+  console.log(process.env.NODE_ENV);
+  app.use(express.static(frontDist));
+
+  // fallback for SPA (React/Vite)
+  app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(frontDist, 'index.html'));
   });
 }
 
