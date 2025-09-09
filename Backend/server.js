@@ -62,7 +62,10 @@ function getPublicId(url) {
 app.get('/AllProdacts', async (req, res) => {
   try {
     let result = await db.query('SELECT * FROM prodact');
-
+    const products = result.rows.map((row) => ({
+      ...row,
+      img_p: row.img_p,
+    }));
     res.status(200).json(products);
   } catch (err) {
     console.log(err);

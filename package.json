@@ -1,0 +1,21 @@
+{
+  "name": "my-work",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm --prefix backend run build",
+    "start": "npm --prefix backend run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilyes-Pro/CRUD-FullStack.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ilyes-Pro/CRUD-FullStack/issues"
+  },
+  "homepage": "https://github.com/ilyes-Pro/CRUD-FullStack#readme"
+}
