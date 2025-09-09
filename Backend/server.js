@@ -16,14 +16,14 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
-// if (NODE_ENV === 'development') {
-//   app.use(
-//     cors({
-//       origin: process.env.FRONTEND_URL,
-//       credentials: true,
-//     })
-//   );
-// }
+if (NODE_ENV === 'development') {
+  app.use(
+    cors({
+      origin: process.env.FRONTEND_URL,
+      credentials: true,
+    })
+  );
+}
 
 // إعداد Cloudinary
 cloudinary.config({
