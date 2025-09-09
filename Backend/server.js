@@ -48,14 +48,14 @@ const db = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-await db.query(`
-  CREATE TABLE IF NOT EXISTS prodact (
-    id SERIAL PRIMARY KEY,
-    name_p VARCHAR(100) NOT NULL,
-    price_p INT NOT NULL,
-    img_p TEXT
-  )
-`);
+// await db.query(`
+//   CREATE TABLE IF NOT EXISTS prodact (
+//     id SERIAL PRIMARY KEY,
+//     name_p VARCHAR(100) NOT NULL,
+//     price_p INT NOT NULL,
+//     img_p TEXT
+//   )
+// `);
 
 // دالة لاستخراج public_id من رابط Cloudinary
 function getPublicId(url) {
