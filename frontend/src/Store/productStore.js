@@ -7,7 +7,7 @@ const useProductStore = create((set) => ({
   ShowProducts: async () => {
     try {
       set({ loading: true });
-      const response = await axios.get('/AllProdacts');
+      const response = await axios.get('/api/products/AllProdacts');
       set({ products: response.data });
     } catch (error) {
       console.error(error);
@@ -22,7 +22,7 @@ const useProductStore = create((set) => ({
       formData.append('nameP', newProduct.nameP);
       formData.append('priceP', newProduct.priceP);
       formData.append('image', newProduct.imgP);
-      const response = await axios.post('/addProdact', formData, {
+      const response = await axios.post('/api/products/addProdact', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       // Optionally, you can refresh the product list after adding a new product
@@ -49,9 +49,13 @@ const useProductStore = create((set) => ({
         formData.append('image', newProduct.imgP);
       }
 
-      let result = await axios.patch(`/Update/${newProduct.id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      let result = await axios.patch(
+        `/api/products/Update/${newProduct.id}`,
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      );
       const pr = result.data;
       set((state) => ({
         products: state.products.map((product) =>
@@ -67,7 +71,7 @@ const useProductStore = create((set) => ({
 
   DeleteProdect: async (id) => {
     try {
-      let result = await axios.delete(`/delete/${id}`);
+      let result = await axios.delete(`/api/products/delete/${id}`);
       console.log(result.data);
     } catch (error) {
       console.error('no:', error);
