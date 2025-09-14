@@ -5,15 +5,17 @@ import path from 'path';
 import ProductRoute from './routes/product.route.js';
 import dotenv from 'dotenv';
 dotenv.config();
+
 let NODE_ENV = process.env.NODE_ENV?.trim();
+
 const app = express();
 const port = process.env.PORT || 5000;
 const __dirname = path.resolve();
 app.use(express.json());
 app.use('/api/products', ProductRoute);
 
-if (process.env.NODE_ENV === 'development') {
-  app.use(CorsOptions()); // ✅ هنا تناديها كدالة
+if (NODE_ENV === 'development') {
+  app.use(CorsOptions); // ✅ هنا تناديها كدالة
 }
 
 if (NODE_ENV === 'production') {

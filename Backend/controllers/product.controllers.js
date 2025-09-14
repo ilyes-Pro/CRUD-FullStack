@@ -5,11 +5,11 @@ import { v2 as cloudinary } from 'cloudinary';
 export const GetProduct = async (req, res) => {
   try {
     let result = await Db.query('SELECT * FROM prodact');
-    const products = result.rows.map((row) => ({
-      ...row,
-      img_p: row.img_p,
-    }));
-    res.status(200).json(products);
+    // const products = result.rows.map((row) => ({
+    //   ...row,
+    //   img_p: row.img_p,
+    // }));
+    res.status(200).json(result);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Internal Server Error' });
