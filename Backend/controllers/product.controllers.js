@@ -9,7 +9,7 @@ export const GetProduct = async (req, res) => {
     //   ...row,
     //   img_p: row.img_p,
     // }));
-    res.status(200).json(result);
+    res.status(200).json(result.rows);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -21,7 +21,7 @@ export const CreateProduct = async (req, res) => {
     console.log('this is ' + process.env.CLOUD_NAME);
     let nameP = req.body?.nameP?.trim();
     let priceP = parseInt(req.body.priceP);
-    let imgP = req.file ? req.file.path : null;
+    let imgP = req.file.path;
 
     let Error = [];
     if (!nameP) Error.push('Name');
@@ -102,3 +102,33 @@ export const Delete = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+// app.patch('/Update/:id', upload.single("image"), async (req, res) => {
+//     try {
+//         const id = parseInt(req.params.id);
+
+//         let nameP = req.body?.nameP || null;
+//         let priceP = req.body?.priceP ? parseInt(req.body.priceP) : null;
+//         let imgP = req.file ? req.file.path : null;
+
+//         let result = await db.query(
+//             `UPDATE prodact
+//              SET name_p = COALESCE($2, name_p),
+//                  price_p = COALESCE($3, price_p),
+//                  img_p = COALESCE($4, img_p)
+//              WHERE id = $1
+//              RETURNING *`,
+//             [id, nameP, priceP, imgP]
+//         );
+
+//         if (result.rows.length === 0) {
+//             return res.status(404).json({ error: "Product not found" });
+//         }
+
+//         res.status(200).json(result.rows);
+
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).json({ error: "Internal Server Error" });
+//     }
+// });
